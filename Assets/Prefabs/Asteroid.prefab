@@ -34,7 +34,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1811433546653698}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.42329407, y: 0.75878906, z: 5.191639}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -51,11 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73ecc23d5d47b9f4182e1c4577842d97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugPrefab: {fileID: 1297575029336942, guid: 38642158e0a6d364dbba6b6853650d4c,
-    type: 2}
-  IsOrbiting: 1
-  _orbitSpeed: 100
-  invertX: 0
-  invertY: 0
-  invertZ: 0
-  InitialPosition: {x: 0, y: 0, z: 0}
+  RotateSpeed: {x: -30, y: 0, z: 0}
+  DebugPreab: {fileID: 1297575029336942, guid: 38642158e0a6d364dbba6b6853650d4c, type: 2}

@@ -1,94 +1,59 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts;
+using Data;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Asteroid : MonoBehaviour
 {
-    public GameObject DebugPrefab;
+    public Vector3 RotateSpeed;
 
-    public bool IsOrbiting = true;
+    public GameObject AsteroidModel { get; set; }
 
-    public float _orbitSpeed = 100f;
+    public GameObject textPrefab;
 
-    private Transform _starTransform;
-    private float _distanceFromStar;
-    private Quaternion _orbitAngle;
-    private Vector3 _axis;
+    public string AsteroidName { get; private set; }
 
+    private GameObject nameText;
 
-    public bool invertX = false;
+    private GameObject asteroidNameParent;
 
-    public bool invertY = false;
-
-    public bool invertZ = false;
-    private float _angleAboutZAxis;
-    private float _angleAboutXAxis;
-    public Quaternion Angle { get; set; }
-
-    public Vector3 InitialPosition;
-
-    private float angleX;
-    private float angleY;
-
-    // Use this for initialization
     void Start()
     {
-        _starTransform = GetComponentInParent<SolarSystem>().StarToGenerateAround.transform;
+        asteroidNameParent = GameObject.FindWithTag("AsteroidNames");
+        UpdateName();
 
-        angleX = Angle.eulerAngles.x;
-        angleY = Angle.eulerAngles.y;
-
-        Vector3 vectorToAsteroidFromStar = this.transform.position - _starTransform.position;
-        _distanceFromStar = vectorToAsteroidFromStar.magnitude;
-
-
-        _angleAboutZAxis = Mathf.Sin(vectorToAsteroidFromStar.y / vectorToAsteroidFromStar.magnitude) * Mathf.Rad2Deg;
-        _angleAboutXAxis = Mathf.Sin(vectorToAsteroidFromStar.x / vectorToAsteroidFromStar.magnitude) * Mathf.Rad2Deg;
-        _orbitAngle = Quaternion.Euler(_angleAboutXAxis, 0, _angleAboutZAxis);
-
-        float ignored;
-        Angle.ToAngleAxis(out ignored, out _axis);
-        InitialPosition = this.transform.position;
+        RotateSpeed = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //const float rotateSpeed = 5f;
+        UpdateName();
 
-        //this.transform.Rotate(rotateSpeed * Time.deltaTime, rotateSpeed * Time.deltaTime, 0, Space.Self);
-        
-        if (false)
+        AsteroidModel.transform.Rotate(RotateSpeed.x * Time.deltaTime, RotateSpeed.y * Time.deltaTime, RotateSpeed.z * Time.deltaTime, Space.Self);
+    }
+
+    private void UpdateName()
+    {
+        if (nameText == null)
         {
-            Instantiate(DebugPrefab, this.transform.position, Quaternion.identity);
+            AsteroidName = AsteroidNames.RandomName();
 
-            Vector3 vectorToAsteroidFromStar = this.transform.position - _starTransform.position;
-            int xFactor = InitialPosition.x < 0 ? 1 : 1;
-            int yFactor = InitialPosition.y < 0 ? 1 : 1;
-            int zFactor = InitialPosition.z < 0 ? 1 : 1;
+            nameText = new GameObject();
+            nameText.transform.parent = this.transform;
+            var textComponent = nameText.AddComponent<GUIText>();
+            textComponent.text = AsteroidName;
+        }
 
-            // _axis = new Vector3(-1, 1, -1).normalized;
-            
-            //// Rotating around the z axis, because the orbit could be tilted
-            //Vector3 directionToAsteroid = vectorToAsteroidFromStar.normalized;
+        var viewportPos = Camera.main.WorldToViewportPoint(AsteroidModel.transform.position);
 
-            //var moveAngle = _orbitAngle * Quaternion.Euler(0, _orbitSpeed, 0) * directionToAsteroid;
-
-            //var axis = new Vector3(xFactor * _axis.x, yFactor * _axis.y, zFactor * _axis.z);
-
-            ////this.transform.RotateAround(_starTransform.position, Vector3.forward, _orbitSpeed * Time.deltaTime);
-            ////this.transform.RotateAround(_starTransform.position, Vector3.up, _orbitSpeed * Time.deltaTime);
-            ////this.transform.RotateAround(_starTransform.position, Vector3.right, _orbitSpeed * Time.deltaTime);
-            
-            //this.transform.RotateAround(_starTransform.position, _starTransform.right, -1 * _orbitSpeed * Time.deltaTime);
-            //this.transform.RotateAround(_starTransform.position, _starTransform.up, _orbitSpeed * Time.deltaTime);
-
-            angleX += _orbitSpeed * Time.deltaTime;
-            angleY += _orbitSpeed * Time.deltaTime;
-
-            // this.transform.rotation = Quaternion.AngleAxis(angleX, Vector3.up) * Quaternion.AngleAxis(angleY, Vector3.right);
-            var rotation = Quaternion.AngleAxis(angleX, Vector3.up) * Quaternion.AngleAxis(angleY, Vector3.right);
-            this.transform.position = rotation * this.transform.position;
+        if (viewportPos.z >= 0 && viewportPos.x.IsBetweenIncludeLimits(0f, 1f) && viewportPos.y.IsBetweenIncludeLimits(0f, 1f))
+        {
+            nameText.SetActive(true);
+            nameText.transform.position = viewportPos;
+        }
+        else
+        {
+            nameText.SetActive(false);
         }
     }
 }
