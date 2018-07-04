@@ -1,0 +1,28 @@
+﻿{
+  "components": [
+    {
+      "name": "Standard Shield I",
+      "componentFamily": "0125e26e-7bf0-44ff-a428-bff42147ea9e",
+      "attributes": [
+        {
+          "name": "shieldAmount",
+          "value": 50
+        }
+      ]
+    },
+    {
+      "name": "Standard Shield II",
+      "componentFamily": "0125e26e-7bf0-44ff-a428-bff42147ea9e",
+      "attributes": [
+        {
+          "name": "shieldAmount",
+          "value": 100
+        },
+        {
+          "name": "shieldRegeneration",
+          "value": 10
+        }
+      ]
+    }
+  ]
+}

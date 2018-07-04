@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Policy;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Engine
         void Apply(IFacility obj);
     }
 
-    class ShieldAttribute : IAttribute
+    class ShieldAttribute : IAttribute, IEquatable<ShieldAttribute>
     {
         public ShieldAttribute()
         {
@@ -48,6 +49,22 @@ namespace Engine
 
         public void Apply(IFacility obj)
         {
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ShieldAttribute);
+        }
+
+        public bool Equals(ShieldAttribute other)
+        {
+            return other != null &&
+                   Name == other.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return 539060726 + EqualityComparer<string>.Default.GetHashCode(Name);
         }
     }
 
